@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaLens — Premium Meta Glasses Reviews Dashboard</title>
+    <!-- Outfit Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Glows -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Header Navigation -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M2 12C2 12 5 5 12 5C19 5 22 12 22 12C22 12 19 19 12 19C5 19 2 12 2 12Z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+                <span class="logo-text">MetaLens<span class="gradient-text">Reviews</span></span>
+            </div>
+            <nav class="header-actions">
+                <div class="admin-badge hidden" id="adminModeIndicator">
+                    <span class="badge-dot"></span> Admin Control Active
+                </div>
+                <div class="user-profile-section" id="userProfileSection">
+                    <button class="btn btn-secondary btn-icon" id="loginBtn">
+                        <svg class="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3" />
+                        </svg>
+                        <span>Sign In / Join</span>
+                    </button>
+                    <div class="user-menu hidden" id="userMenu">
+                        <span class="user-greeting">Hi, <strong id="userNameText">User</strong></span>
+                        <button class="btn btn-secondary btn-small" id="profileBtn">Profile</button>
+                        <button class="btn btn-danger btn-small" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="app-content">
+        <!-- Key Metrics Cards -->
+        <section class="metrics-grid">
+            <div class="metric-card animate-fade-in">
+                <div class="metric-icon-wrap bg-cyan-glow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </svg>
+                </div>
+                <div class="metric-data">
+                    <span class="metric-label">Average Rating</span>
+                    <h2 class="metric-value" id="avgRatingText">4.20</h2>
+                    <div class="star-rating-display" id="avgRatingStars">
+                        <!-- Stars injected dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card animate-fade-in" style="animation-delay: 0.1s;">
+                <div class="metric-icon-wrap bg-purple-glow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                </div>
+                <div class="metric-data">
+                    <span class="metric-label">Total Reviews</span>
+                    <h2 class="metric-value" id="totalReviewsText">0</h2>
+                    <span class="metric-sub" id="reviewsSubtext">Seeded Database</span>
+                </div>
+            </div>
+
+            <div class="metric-card animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="metric-icon-wrap bg-emerald-glow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                    </svg>
+                </div>
+                <div class="metric-data">
+                    <span class="metric-label">Verified Purchases</span>
+                    <h2 class="metric-value" id="verifiedRatioText">0%</h2>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="verifiedProgressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metric-card animate-fade-in" style="animation-delay: 0.3s;">
+                <div class="metric-icon-wrap bg-rose-glow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+                    </svg>
+                </div>
+                <div class="metric-data">
+                    <span class="metric-label">Positive Sentiment</span>
+                    <h2 class="metric-value" id="sentimentRatioText">0%</h2>
+                    <span class="metric-sub" id="sentimentSubtext">4.0+ Stars</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Dashboard Split Layout -->
+        <div class="dashboard-layout">
+            <!-- Left Side Panel (Controls, Sentiment, AI Summary) -->
+            <aside class="dashboard-sidebar">
+                <!-- Search & Filters Container -->
+                <div class="glass-panel search-filters-panel">
+                    <h3 class="panel-title">Filter Matrix</h3>
+                    
+                    <div class="form-group">
+                        <label for="searchQuery">Search Reviews</label>
+                        <div class="input-with-icon">
+                            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg>
+                            <input type="text" id="searchQuery" placeholder="Search keywords, titles, reviewers...">
+                        </div>
+                    </div>
+
+                    <div class="filter-row">
+                        <div class="form-group half-width">
+                            <label for="ratingFilter">Rating</label>
+                            <select id="ratingFilter">
+                                <option value="">All Ratings</option>
+                                <option value="5">5 Stars only</option>
+                                <option value="4">4 Stars & up</option>
+                                <option value="3">3 Stars & up</option>
+                                <option value="2">2 Stars & up</option>
+                                <option value="1">1 Star & up</option>
+                            </select>
+                        </div>
+                        <div class="form-group half-width">
+                            <label for="verifiedFilter">Purchase</label>
+                            <select id="verifiedFilter">
+                                <option value="">All Purchases</option>
+                                <option value="true">Verified only</option>
+                                <option value="false">Unverified only</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="filter-row">
+                        <div class="form-group half-width">
+                            <label for="countryFilter">Country</label>
+                            <select id="countryFilter">
+                                <option value="">All Countries</option>
+                                <!-- Injected dynamically -->
+                            </select>
+                        </div>
+                        <div class="form-group half-width">
+                            <label for="deviceFilter">Device</label>
+                            <select id="deviceFilter">
+                                <option value="">All Devices</option>
+                                <option value="wayfarer">Wayfarer</option>
+                                <option value="headliner">Headliner</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-secondary btn-full" id="clearFiltersBtn">
+                        Reset Filters
+                    </button>
+                </div>
+
+                <!-- AI Copilot Synthesis -->
+                <div class="glass-panel ai-panel">
+                    <div class="ai-header">
+                        <svg class="ai-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12A10 10 0 0 1 12 2z" />
+                            <path d="M12 6v12M6 12h12" />
+                        </svg>
+                        <h3 class="panel-title margin-left-small">AI Copilot Review Synthesis</h3>
+                    </div>
+                    <div id="aiSummaryContent">
+                        <div class="pulse-loader">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <p class="text-center font-muted">Synthesizing review sentiment...</p>
+                    </div>
+                </div>
+
+                <!-- Sentiment Distribution Matrix -->
+                <div class="glass-panel sentiment-panel">
+                    <h3 class="panel-title">Sentiment Distribution</h3>
+                    <div id="sentimentDistributionContent">
+                        <!-- Sentiment bars injected dynamically -->
+                        <div class="pulse-loader">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Right Side Panel (Reviews Cards & Header) -->
+            <section class="reviews-feed">
+                <div class="feed-header">
+                    <div class="feed-info">
+                        <h3 class="feed-title">Glasses Review Feed</h3>
+                        <span class="feed-count" id="feedCountText">Showing 0 reviews</span>
+                    </div>
+                    <div class="feed-actions">
+                        <div class="sort-selector">
+                            <label for="sortBySelect">Sort:</label>
+                            <select id="sortBySelect">
+                                <option value="-date">Latest first</option>
+                                <option value="date">Oldest first</option>
+                                <option value="-rating">Highest rated</option>
+                                <option value="rating">Lowest rated</option>
+                                <option value="-helpful">Most helpful</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="writeReviewBtn">
+                            <svg class="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12h14" />
+                            </svg>
+                            <span>Write Review</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active Filter Tags Row -->
+                <div class="active-tags hidden" id="activeTagsRow"></div>
+
+                <!-- Main Reviews Grid -->
+                <div class="reviews-grid" id="reviewsGridContainer">
+                    <!-- Cards will be injected dynamically -->
+                    <div class="card-skeleton"></div>
+                    <div class="card-skeleton"></div>
+                    <div class="card-skeleton"></div>
+                </div>
+
+                <!-- Pagination Section -->
+                <div class="pagination-container" id="paginationContainer">
+                    <button class="btn btn-secondary btn-icon" id="prevPageBtn" disabled>
+                        <svg class="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                        <span>Previous</span>
+                    </button>
+                    <span class="pagination-info" id="paginationInfoText">Page 1 of 1</span>
+                    <button class="btn btn-secondary btn-icon" id="nextPageBtn" disabled>
+                        <span>Next</span>
+                        <svg class="btn-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- FLOATING ACTIONS & DIALOGS -->
+
+    <!-- WRITE REVIEW MODAL -->
+    <div class="modal-overlay hidden" id="reviewModal">
+        <div class="glass-modal animate-modal-in">
+            <button class="modal-close" id="closeReviewModalBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+            <div class="modal-header">
+                <h3 class="modal-title">Share Your Meta Glasses Experience</h3>
+                <p class="modal-subtitle">Submit review details below. Custom rating and spam checks apply.</p>
+            </div>
+            <form id="reviewForm" novalidate>
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="formReviewID">Review ID <span class="required">*</span></label>
+                        <input type="text" id="formReviewID" placeholder="e.g. R99TESTVALIDATION" required>
+                        <div class="form-help">Must start with R and be alphanumeric. If empty, a random unique ID is generated.</div>
+                        <span class="error-msg" id="formReviewIDError">Please provide a valid Review ID matching /^R[A-Z0-9]+$/</span>
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="formName">Your Name <span class="required">*</span></label>
+                        <input type="text" id="formName" placeholder="e.g. John Doe" required>
+                        <span class="error-msg" id="formNameError">Please enter your reviewer name.</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label>Rating <span class="required">*</span></label>
+                        <div class="star-rating-input" id="formRatingInput">
+                            <span class="input-star" data-rating="1">★</span>
+                            <span class="input-star" data-rating="2">★</span>
+                            <span class="input-star" data-rating="3">★</span>
+                            <span class="input-star" data-rating="4">★</span>
+                            <span class="input-star" data-rating="5">★</span>
+                        </div>
+                        <input type="hidden" id="formRating" value="5" required>
+                        <span class="error-msg" id="formRatingError">Please select a rating of 1 to 5 stars.</span>
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="formCountry">Country <span class="required">*</span></label>
+                        <input type="text" id="formCountry" placeholder="e.g. United States" required>
+                        <span class="error-msg" id="formCountryError">Please specify your country.</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="formTitle">Review Title <span class="required">*</span></label>
+                    <input type="text" id="formTitle" placeholder="e.g. Incredible audio but short battery life" required minlength="3">
+                    <span class="error-msg" id="formTitleError">Title must be at least 3 characters.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="formReview">Detailed Review Content <span class="required">*</span></label>
+                    <textarea id="formReview" rows="4" placeholder="How did the smart features, sound quality, camera, and comfort work for you?" required></textarea>
+                    <span class="error-msg" id="formReviewError">Please enter your review text body.</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half-width checkbox-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="formVerified" checked>
+                            <span class="checkmark"></span>
+                            Verified Purchase
+                        </label>
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="formDevice">Device Used</label>
+                        <select id="formDevice">
+                            <option value="Wayfarer">Wayfarer Smart Shades</option>
+                            <option value="Headliner">Headliner Smart Shades</option>
+                            <option value="Other">Other / Meta Smart Glasses</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelReviewBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span id="submitReviewBtnText">Publish Review</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- AUTHENTICATION DIALOG MODAL -->
+    <div class="modal-overlay hidden" id="authModal">
+        <div class="glass-modal auth-modal animate-modal-in">
+            <button class="modal-close" id="closeAuthModalBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+            
+            <!-- Auth Modal Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tabLoginBtn">Sign In</button>
+                <button class="auth-tab-btn" id="tabRegisterBtn">Create Account</button>
+            </div>
+
+            <!-- LOGIN PANEL -->
+            <div class="auth-panel-content" id="loginPanel">
+                <div class="modal-header">
+                    <h3 class="modal-title text-center">Welcome Back</h3>
+                    <p class="modal-subtitle text-center">Access admin dashboard privileges and manage posts.</p>
+                </div>
+                <form id="loginForm" novalidate>
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="e.g. harshit@test.com" required>
+                        <span class="error-msg" id="loginEmailError">Please enter a valid email.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                        <span class="error-msg" id="loginPasswordError">Please enter your password.</span>
+                    </div>
+                    <div class="auth-helper-row">
+                        <button type="button" class="link-btn" id="forgotPasswordBtn">Forgot Password?</button>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full margin-top-medium">
+                        <span>Sign In Securely</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- REGISTER PANEL -->
+            <div class="auth-panel-content hidden" id="registerPanel">
+                <div class="modal-header">
+                    <h3 class="modal-title text-center">Join MetaLens</h3>
+                    <p class="modal-subtitle text-center">Create an account to submit validated smart reviews.</p>
+                </div>
+                <form id="registerForm" novalidate>
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <input type="text" id="registerName" placeholder="e.g. Harshit Pandya" required>
+                        <span class="error-msg" id="registerNameError">Please enter your full name.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email Address</label>
+                        <input type="email" id="registerEmail" placeholder="e.g. harshit@test.com" required>
+                        <span class="error-msg" id="registerEmailError">Please enter a valid email address.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" placeholder="••••••••" required>
+                        <div class="form-help">Must be at least 8 characters, with 1 uppercase letter, 1 lowercase letter, and 1 number/special character.</div>
+                        <span class="error-msg" id="registerPasswordError">Password does not satisfy strong security requirements.</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="registerIsAdmin">
+                            <span class="checkmark"></span>
+                            Register with Administrative Privileges
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full margin-top-medium">
+                        <span>Initialize Account</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFILE MODAL -->
+    <div class="modal-overlay hidden" id="profileModal">
+        <div class="glass-modal animate-modal-in">
+            <button class="modal-close" id="closeProfileModalBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+            <div class="modal-header">
+                <h3 class="modal-title">Your Profile & Session Management</h3>
+                <p class="modal-subtitle">Details retrieved from JWT Authorization Profile endpoint.</p>
+            </div>
+            <div class="profile-details-content">
+                <div class="profile-avatar-row">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-meta">
+                        <h4 id="profileNameText">Harshit Pandya</h4>
+                        <span class="role-chip" id="profileRoleText">User</span>
+                    </div>
+                </div>
+                <div class="profile-fields">
+                    <div class="profile-field-row">
+                        <span class="profile-field-label">Email:</span>
+                        <span class="profile-field-value" id="profileEmailText">harshit@test.com</span>
+                    </div>
+                    <div class="profile-field-row">
+                        <span class="profile-field-label">Account Type:</span>
+                        <span class="profile-field-value" id="profileTypeText">Standard Account</span>
+                    </div>
+                </div>
+                <div class="profile-actions-danger">
+                    <h5>Danger Zone</h5>
+                    <p class="form-help">Permanently delete your profile and auth tokens from the MongoDB database.</p>
+                    <button class="btn btn-danger btn-full" id="deleteAccountBtn">Permanently Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION POPUPS CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
