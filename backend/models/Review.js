@@ -79,6 +79,10 @@ const ReviewSchema = new mongoose.Schema({
     helpfulness_score: {
         type: Number,
         default: 0
+    },
+    device: {
+        type: String,
+        default: 'Wayfarer'
     }
 }, {
     timestamps: true

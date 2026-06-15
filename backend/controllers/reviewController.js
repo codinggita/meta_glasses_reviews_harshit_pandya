@@ -186,7 +186,11 @@ exports.getReviews = async (req, res) => {
                 limit,
                 pages: Math.ceil(total / limit)
             },
-            data: results
+            data: results,
+            reviews: results,
+            totalReviews: total,
+            currentPage: page,
+            totalPages: Math.ceil(total / limit)
         });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
@@ -228,7 +232,7 @@ exports.getReview = async (req, res) => {
 // @access  Public
 exports.createReview = async (req, res) => {
     try {
-        const { reviewID, name, date, verifiedPurchase, rating, title, review, country } = req.body;
+        const { reviewID, name, date, verifiedPurchase, rating, title, review, country, device } = req.body;
 
         // Missing required fields validation
         if (!reviewID || !name || !date || verifiedPurchase === undefined || !rating || !title || !review || !country) {
@@ -282,7 +286,8 @@ exports.createReview = async (req, res) => {
             reviewImage: req.body.reviewImage || '',
             helpful_aug: parseInt(req.body.helpful_aug) || 0,
             is_positive_review: req.body.is_positive_review === '1' || req.body.is_positive_review === true || parsedRating >= 4,
-            helpfulness_score: parseFloat(req.body.helpfulness_score) || 0
+            helpfulness_score: parseFloat(req.body.helpfulness_score) || 0,
+            device: device || 'Wayfarer'
         });
 
         res.status(201).json({ success: true, data: newReview });
@@ -1158,7 +1163,8 @@ exports.getPositiveStats = async (req, res) => {
             success: true,
             totalReviews: total,
             positiveReviews: positive,
-            percentage: total ? ((positive / total) * 100).toFixed(2) + '%' : '0%'
+            percentage: total ? ((positive / total) * 100).toFixed(2) + '%' : '0%',
+            positivePercentage: total ? ((positive / total) * 100).toFixed(2) : '0'
         });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
@@ -1232,7 +1238,8 @@ exports.getVerifiedStats = async (req, res) => {
             success: true,
             totalReviews: total,
             verifiedPurchases: verified,
-            percentage: total ? ((verified / total) * 100).toFixed(2) + '%' : '0%'
+            percentage: total ? ((verified / total) * 100).toFixed(2) + '%' : '0%',
+            verifiedPercentage: total ? ((verified / total) * 100).toFixed(2) : '0'
         });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
@@ -1446,7 +1453,10 @@ exports.generateAISummary = async (req, res) => {
                 negativeRatio: total ? ((negativeCount / total) * 100).toFixed(2) + '%' : '0%',
                 keyProsHighlight: pros,
                 keyConsHighlight: cons,
-                aiSynthesizedVerdict: 'The Ray-Ban Meta Glasses stand out as a highly successful fusion of classic aesthetic design with premium smart speaker and camera hardware. It has become a favorite among content creators for hands-free documentation. However, critical weaknesses remain in battery life and region-specific software restrictions which limit full AI integration in non-US locations.'
+                aiSynthesizedVerdict: 'The Ray-Ban Meta Glasses stand out as a highly successful fusion of classic aesthetic design with premium smart speaker and camera hardware. It has become a favorite among content creators for hands-free documentation. However, critical weaknesses remain in battery life and region-specific software restrictions which limit full AI integration in non-US locations.',
+                verdict: 'The Ray-Ban Meta Glasses stand out as a highly successful fusion of classic aesthetic design with premium smart speaker and camera hardware. It has become a favorite among content creators for hands-free documentation. However, critical weaknesses remain in battery life and region-specific software restrictions which limit full AI integration in non-US locations.',
+                pros: pros,
+                cons: cons
             }
         });
     } catch (error) {
@@ -1480,6 +1490,11 @@ exports.getSentimentAnalysis = async (req, res) => {
                     count: negative,
                     percentage: total ? ((negative / total) * 100).toFixed(2) + '%' : '0%'
                 }
+            },
+            sentiment: {
+                positivePercentage: total ? ((positive / total) * 100).toFixed(2) : '0',
+                neutralPercentage: total ? ((neutral / total) * 100).toFixed(2) : '0',
+                negativePercentage: total ? ((negative / total) * 100).toFixed(2) : '0'
             }
         });
     } catch (error) {
