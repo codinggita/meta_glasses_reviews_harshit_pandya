@@ -50,6 +50,33 @@ export default function App() {
   const toggleTheme = () => {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
+
+  // Dynamic titles and meta descriptions (Helmet equivalent for SEO)
+  useEffect(() => {
+    const tabTitles = {
+      dashboard: "Analytics Dashboard | MetaLens Reviews",
+      feed: "Verified Reviews Feed | MetaLens Reviews",
+      comparison: "Wayfarer vs Headliner Comparison | MetaLens Reviews",
+      chat: "AI Reviews Copilot | MetaLens Reviews"
+    };
+
+    const tabDescriptions = {
+      dashboard: "View real-time customer review metrics, average rating trends, rating score distributions, and verification analysis.",
+      feed: "Browse, filter, and search verified customer reviews for Meta Ray-Ban Wayfarer and Headliner smart glasses with input debouncing.",
+      comparison: "Compare technical features, hardware performance, customer pros, cons, and rating metrics of Wayfarer and Headliner.",
+      chat: "Consult our AI assistant for automated customer feedback summaries, pros/cons, and specific audio/battery verdicts."
+    };
+
+    document.title = tabTitles[activeTab] || "MetaLens — Premium Reviews Hub";
+
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', tabDescriptions[activeTab] || "Aggregate, analyze, and manage customer experiences for Meta Ray-Ban smart glasses.");
+  }, [activeTab]);
   
   // Modals state
   const [wizardOpen, setWizardOpen] = useState(false);
