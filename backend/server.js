@@ -8,8 +8,23 @@ const connectDB = require('./config/db');
 // Load environment variables
 dotenv.config({ path: path.join(__dirname, '.env') });
 
-// Connect to database
-connectDB();
+// Connect to database and automatically seed if empty
+connectDB().then(async () => {
+    try {
+        const Review = require('./models/Review');
+        const count = await Review.countDocuments();
+        if (count === 0) {
+            console.log('No reviews found in database. Starting automatic seeding...');
+            const seedData = require('./services/seed');
+            await seedData(true);
+            console.log('Database auto-seeded successfully on server startup.');
+        } else {
+            console.log(`Database ready. Loaded ${count} reviews.`);
+        }
+    } catch (err) {
+        console.error('Failed to perform automatic database check/seeding:', err.message);
+    }
+});
 
 const app = express();
 

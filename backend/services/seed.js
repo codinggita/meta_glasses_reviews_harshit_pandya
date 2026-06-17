@@ -6,12 +6,14 @@ const Review = require('../models/Review');
 
 dotenv.config({ path: path.join(__dirname, '../.env') });
 
-const seedData = async () => {
+const seedData = async (skipConnect = false) => {
     try {
-        const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/meta_glasses_reviews';
-        console.log(`Connecting to database at ${mongoURI}...`);
-        await mongoose.connect(mongoURI);
-        console.log('MongoDB Connected. Clearing existing reviews...');
+        if (!skipConnect) {
+            const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/meta_glasses_reviews';
+            console.log(`Connecting to database at ${mongoURI}...`);
+            await mongoose.connect(mongoURI);
+        }
+        console.log('Clearing existing reviews...');
         
         await Review.deleteMany({});
         console.log('Cleared existing reviews.');
@@ -107,11 +109,19 @@ const seedData = async () => {
         }
 
         console.log('Database seeding completed successfully!');
-        process.exit(0);
+        if (!skipConnect) process.exit(0);
     } catch (error) {
         console.error('Error seeding database:', error);
-        process.exit(1);
+        if (!skipConnect) {
+            process.exit(1);
+        } else {
+            throw error;
+        }
     }
 };
 
-seedData();
+if (require.main === module) {
+    seedData();
+}
+
+module.exports = seedData;

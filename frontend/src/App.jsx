@@ -77,6 +77,7 @@ export default function App() {
     }
     metaDesc.setAttribute('content', tabDescriptions[activeTab] || "Aggregate, analyze, and manage customer experiences for Meta Ray-Ban smart glasses.");
   }, [activeTab]);
+
   
   // Modals state
   const [wizardOpen, setWizardOpen] = useState(false);
@@ -105,14 +106,33 @@ export default function App() {
   const [loadingFeed, setLoadingFeed] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [activeFilters, setActiveFilters] = useState({
-    keyword: '',
-    rating: '',
-    verifiedPurchase: '',
-    country: '',
-    device: '',
-    sort: '-date'
+  const [activeFilters, setActiveFilters] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('metaLens_activeFilters');
+      return saved ? JSON.parse(saved) : {
+        keyword: '',
+        rating: '',
+        verifiedPurchase: '',
+        country: '',
+        device: '',
+        sort: '-date'
+      };
+    } catch (e) {
+      return {
+        keyword: '',
+        rating: '',
+        verifiedPurchase: '',
+        country: '',
+        device: '',
+        sort: '-date'
+      };
+    }
   });
+
+  // Temporary search filters session persistence
+  useEffect(() => {
+    sessionStorage.setItem('metaLens_activeFilters', JSON.stringify(activeFilters));
+  }, [activeFilters]);
 
   // Toasts
   const [toasts, setToasts] = useState([]);

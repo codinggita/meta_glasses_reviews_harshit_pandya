@@ -29,7 +29,13 @@ export default function ReviewWizard({ isOpen, onClose, onSuccess, initialData =
         device: initialData.device || 'Wayfarer'
       });
     } else {
-      setFormValues({
+      let draft = null;
+      try {
+        const saved = sessionStorage.getItem('metaLens_newReviewDraft');
+        if (saved) draft = JSON.parse(saved);
+      } catch (e) {}
+
+      setFormValues(draft || {
         reviewID: '',
         name: '',
         rating: 5,
@@ -42,6 +48,13 @@ export default function ReviewWizard({ isOpen, onClose, onSuccess, initialData =
     }
     setErrors({});
   }, [initialData, isOpen]);
+
+  // Save form progress for new reviews (drafts) in sessionStorage
+  useEffect(() => {
+    if (!initialData && isOpen) {
+      sessionStorage.setItem('metaLens_newReviewDraft', JSON.stringify(formValues));
+    }
+  }, [formValues, isOpen, initialData]);
 
   if (!isOpen) return null;
 
@@ -132,6 +145,9 @@ export default function ReviewWizard({ isOpen, onClose, onSuccess, initialData =
       }
 
       if (res.status === 200 || res.status === 201) {
+        if (!initialData) {
+          sessionStorage.removeItem('metaLens_newReviewDraft');
+        }
         onSuccess(initialData ? 'Review updated successfully!' : 'Review published successfully!');
         onClose();
       } else {
