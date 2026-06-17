@@ -31,11 +31,34 @@ ChartJS.register(
 // Helper to translate numeric months to string shortnames
 const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export default function DashboardCharts() {
+export default function DashboardCharts({ theme = 'dark' }) {
   const [trendData, setTrendData] = useState(null);
   const [distData, setDistData] = useState(null);
   const [verifiedData, setVerifiedData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const isDark = theme === 'dark';
+  const gridColor = isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(15, 23, 42, 0.06)';
+  const tickColor = isDark ? '#a1a1aa' : '#475569';
+  const tooltipBg = isDark ? '#0c0e21' : '#ffffff';
+  const tooltipText = isDark ? '#f3f4f6' : '#0f172a';
+  const tooltipBorder = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(15, 23, 42, 0.15)';
+  const doughnutUnverifiedBg = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.06)';
+  const doughnutUnverifiedBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.06)';
+
+  const displayVerifiedData = verifiedData
+    ? {
+        ...verifiedData,
+        datasets: verifiedData.datasets.map(ds => ({
+          ...ds,
+          backgroundColor: [
+            ds.backgroundColor[0],
+            doughnutUnverifiedBg
+          ],
+          borderColor: doughnutUnverifiedBorder
+        }))
+      }
+    : null;
 
   useEffect(() => {
     async function fetchChartData() {
@@ -149,10 +172,12 @@ export default function DashboardCharts() {
         display: false
       },
       tooltip: {
-        backgroundColor: '#0c0e21',
+        backgroundColor: tooltipBg,
+        titleColor: tooltipText,
+        bodyColor: tooltipText,
         titleFont: { family: 'Outfit', size: 13 },
         bodyFont: { family: 'Outfit', size: 12 },
-        borderColor: 'rgba(255, 255, 255, 0.1)',
+        borderColor: tooltipBorder,
         borderWidth: 1,
         padding: 10,
         displayColors: false
@@ -160,12 +185,12 @@ export default function DashboardCharts() {
     },
     scales: {
       x: {
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        ticks: { color: '#a1a1aa', font: { family: 'Outfit', size: 11 } }
+        grid: { color: gridColor },
+        ticks: { color: tickColor, font: { family: 'Outfit', size: 11 } }
       },
       y: {
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        ticks: { color: '#a1a1aa', font: { family: 'Outfit', size: 11 } }
+        grid: { color: gridColor },
+        ticks: { color: tickColor, font: { family: 'Outfit', size: 11 } }
       }
     }
   };
@@ -175,12 +200,12 @@ export default function DashboardCharts() {
     indexAxis: 'y',
     scales: {
       x: {
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        ticks: { color: '#a1a1aa', precision: 0, font: { family: 'Outfit', size: 11 } }
+        grid: { color: gridColor },
+        ticks: { color: tickColor, precision: 0, font: { family: 'Outfit', size: 11 } }
       },
       y: {
         grid: { display: false },
-        ticks: { color: '#a1a1aa', font: { family: 'Outfit', size: 11 } }
+        ticks: { color: tickColor, font: { family: 'Outfit', size: 11 } }
       }
     }
   };
@@ -193,19 +218,22 @@ export default function DashboardCharts() {
       legend: {
         position: 'bottom',
         labels: {
-          color: '#a1a1aa',
+          color: tickColor,
           font: { family: 'Outfit', size: 12 },
           boxWidth: 12,
           padding: 12
         }
       },
       tooltip: {
-        backgroundColor: '#0c0e21',
+        backgroundColor: tooltipBg,
+        titleColor: tooltipText,
+        bodyColor: tooltipText,
         titleFont: { family: 'Outfit', size: 13 },
         bodyFont: { family: 'Outfit', size: 12 },
-        borderColor: 'rgba(255, 255, 255, 0.1)',
+        borderColor: tooltipBorder,
         borderWidth: 1,
-        padding: 10
+        padding: 10,
+        displayColors: false
       }
     }
   };
@@ -250,7 +278,7 @@ export default function DashboardCharts() {
         <h3 className="panel-title">Verified Purchase Ratio</h3>
         <div className="chart-canvas-container" style={{ height: '200px' }}>
           {verifiedData ? (
-            <Doughnut data={verifiedData} options={doughnutOptions} />
+            <Doughnut data={displayVerifiedData} options={doughnutOptions} />
           ) : (
             <div className="text-center font-muted" style={{ padding: '40px' }}>No verified stats available.</div>
           )}
