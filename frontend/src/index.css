@@ -236,6 +236,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 8px;
   white-space: nowrap;
+  position: relative;
 }
 
 .nav-tab-btn:hover {
@@ -247,6 +248,33 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--nav-active-color);
   background: var(--nav-active-bg);
   border: 1px solid var(--nav-active-border);
+}
+
+.nav-tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan-primary), var(--purple-primary));
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.nav-tab-btn.active::after {
+  left: 16px;
+  right: 16px;
+  opacity: 1;
+  box-shadow: 0 0 6px var(--cyan-glow);
+}
+
+.nav-tab-btn:hover::after {
+  left: 24px;
+  right: 24px;
+  opacity: 0.5;
 }
 
 .header-actions {
@@ -442,8 +470,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .metric-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-color: var(--cyan-primary);
+  box-shadow: 0 10px 30px var(--cyan-glow);
 }
 
 .metric-card:hover::before {
@@ -923,8 +951,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .review-card:hover {
   transform: scale(1.005) translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: var(--purple-primary);
+  box-shadow: 0 10px 30px var(--purple-glow);
 }
 
 .card-top {
@@ -1193,8 +1221,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .model-showcase-card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  border-color: var(--cyan-primary);
+  box-shadow: 0 15px 40px var(--cyan-glow);
 }
 
 .model-title-row {
@@ -1387,17 +1415,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .chat-msg-received .msg-bubble {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--glass-border);
+  border-left: 3px solid var(--cyan-primary);
   color: var(--text-primary);
   border-bottom-left-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+
+:root[data-theme='light'] .chat-msg-received .msg-bubble {
+  background: rgba(15, 23, 42, 0.02);
 }
 
 .chat-msg-sent .msg-bubble {
-  background: linear-gradient(135deg, var(--purple-primary) 0%, #6d28d9 100%);
-  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--cyan-primary) 0%, var(--purple-primary) 100%);
+  color: #ffffff !important;
   border-bottom-right-radius: 4px;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+  box-shadow: 0 4px 15px var(--purple-glow);
 }
 
 .msg-sender {
