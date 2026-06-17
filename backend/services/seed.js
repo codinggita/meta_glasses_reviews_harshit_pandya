@@ -16,7 +16,7 @@ const seedData = async () => {
         await Review.deleteMany({});
         console.log('Cleared existing reviews.');
 
-        const filePath = path.join(__dirname, '../../Meta-Glasses-Reviews.json');
+        const filePath = path.join(__dirname, '../Meta-Glasses-Reviews.json');
         console.log(`Reading dataset from ${filePath}...`);
         
         if (!fs.existsSync(filePath)) {
@@ -57,6 +57,14 @@ const seedData = async () => {
             // Parse is_positive_review
             const isPositive = r.is_positive_review === '1' || r.is_positive_review === 1 || r.is_positive_review === 'true' || r.is_positive_review === true;
 
+            // Check review text and title for device model
+            const reviewText = (r.review || '').toLowerCase();
+            const titleText = (r.title || '').toLowerCase();
+            let parsedDevice = 'Wayfarer';
+            if (reviewText.includes('headliner') || titleText.includes('headliner')) {
+                parsedDevice = 'Headliner';
+            }
+
             return {
                 reviewID: r.reviewID,
                 name: r.name || 'Anonymous',
@@ -73,7 +81,8 @@ const seedData = async () => {
                 reviewImage: r.reviewImage || '',
                 helpful_aug: parsedHelpfulAug,
                 is_positive_review: isPositive,
-                helpfulness_score: parsedScore
+                helpfulness_score: parsedScore,
+                device: parsedDevice
             };
         });
 

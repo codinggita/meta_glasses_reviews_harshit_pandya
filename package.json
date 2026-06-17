@@ -1,0 +1,16 @@
+{
+  "name": "meta-glasses-reviews-hub",
+  "version": "1.0.0",
+  "description": "Full Stack Meta Glasses Reviews Hub",
+  "scripts": {
+    "install-all": "npm install && npm install --prefix backend && npm install --prefix frontend",
+    "seed": "node backend/services/seed.js",
+    "backend": "node backend/server.js",
+    "frontend": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "build": "npm run build --prefix frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
