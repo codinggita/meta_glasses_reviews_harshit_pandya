@@ -40,6 +40,51 @@
   --border-radius-small: 8px;
   --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   --font-outfit: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Theme-specific custom backgrounds */
+  --header-bg: rgba(6, 8, 19, 0.85);
+  --modal-bg: rgba(12, 14, 33, 0.92);
+  --modal-overlay-bg: rgba(3, 4, 9, 0.8);
+  --toast-bg: rgba(12, 14, 33, 0.95);
+  --glow-opacity: 0.22;
+}
+
+:root[data-theme='light'] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(15, 23, 42, 0.08);
+  --glass-highlight: rgba(15, 23, 42, 0.02);
+  
+  --cyan-primary: #0891b2;
+  --cyan-light: #06b6d4;
+  --cyan-glow: rgba(8, 145, 178, 0.12);
+  
+  --purple-primary: #7c3aed;
+  --purple-light: #8b5cf6;
+  --purple-glow: rgba(124, 58, 237, 0.12);
+  
+  --emerald-primary: #059669;
+  --emerald-glow: rgba(5, 150, 105, 0.12);
+  
+  --rose-primary: #e11d48;
+  --rose-glow: rgba(225, 29, 72, 0.12);
+  
+  --amber-primary: #d97706;
+  --amber-glow: rgba(217, 119, 6, 0.12);
+  
+  /* Text colors */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  
+  --header-bg: rgba(248, 250, 252, 0.85);
+  --modal-bg: rgba(255, 255, 255, 0.92);
+  --modal-overlay-bg: rgba(15, 23, 42, 0.4);
+  --toast-bg: rgba(255, 255, 255, 0.95);
+  --glow-opacity: 0.08;
 }
 
 /* ==========================================================================
@@ -59,6 +104,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Background Glow Effects */
@@ -70,7 +116,7 @@ body {
   filter: blur(150px);
   z-index: -1;
   pointer-events: none;
-  opacity: 0.22;
+  opacity: var(--glow-opacity);
   animation: pulse-glow 20s infinite alternate ease-in-out;
 }
 
@@ -115,7 +161,7 @@ h1, h2, h3, h4, h5, h6 {
    ========================================================================== */
 
 .app-header {
-  background: rgba(6, 8, 19, 0.85);
+  background: var(--header-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--glass-border);
@@ -1423,7 +1469,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(3, 4, 9, 0.8);
+  background: var(--modal-overlay-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   display: flex;
@@ -1440,10 +1486,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .glass-modal {
-  background: rgba(12, 14, 33, 0.92);
+  background: var(--modal-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--glass-border);
   border-radius: var(--border-radius-large);
   width: 100%;
   max-width: 600px;
@@ -1727,7 +1773,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .toast {
-  background: rgba(12, 14, 33, 0.95);
+  background: var(--toast-bg);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
   padding: 14px 20px;
@@ -1890,3 +1936,53 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 13px;
   }
 }
+
+/* ==========================================================================
+   DROPDOWN READABILITY FIX & THEME TOGGLE
+   ========================================================================== */
+
+/* Fix native dropdown option colors to be legible in both light and dark themes */
+select option {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Ensure selected option stands out correctly */
+select option:hover,
+select option:focus,
+select option:active {
+  background-color: var(--cyan-glow) !important;
+}
+
+/* Custom premium theme toggle button styling */
+.theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--cyan-primary);
+  box-shadow: 0 0 12px var(--cyan-glow);
+  transform: translateY(-2px);
+}
+
+.theme-toggle-btn svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-btn:hover svg {
+  transform: rotate(45deg);
+}
+
