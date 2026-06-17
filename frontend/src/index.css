@@ -47,6 +47,11 @@
   --modal-overlay-bg: rgba(3, 4, 9, 0.8);
   --toast-bg: rgba(12, 14, 33, 0.95);
   --glow-opacity: 0.22;
+
+  --hover-bg: rgba(255, 255, 255, 0.04);
+  --nav-active-color: var(--cyan-light);
+  --nav-active-bg: rgba(6, 182, 212, 0.1);
+  --nav-active-border: rgba(6, 182, 212, 0.18);
 }
 
 :root[data-theme='light'] {
@@ -85,6 +90,11 @@
   --modal-overlay-bg: rgba(15, 23, 42, 0.4);
   --toast-bg: rgba(255, 255, 255, 0.95);
   --glow-opacity: 0.08;
+
+  --hover-bg: rgba(15, 23, 42, 0.04);
+  --nav-active-color: var(--cyan-primary);
+  --nav-active-bg: rgba(8, 145, 178, 0.08);
+  --nav-active-border: rgba(8, 145, 178, 0.18);
 }
 
 /* ==========================================================================
@@ -230,13 +240,13 @@ h1, h2, h3, h4, h5, h6 {
 
 .nav-tab-btn:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--hover-bg);
 }
 
 .nav-tab-btn.active {
-  color: var(--cyan-light);
-  background: rgba(6, 182, 212, 0.1);
-  border: 1px solid rgba(6, 182, 212, 0.18);
+  color: var(--nav-active-color);
+  background: var(--nav-active-bg);
+  border: 1px solid var(--nav-active-border);
 }
 
 .header-actions {
@@ -1984,5 +1994,75 @@ select option:active {
 
 .theme-toggle-btn:hover svg {
   transform: rotate(45deg);
+}
+
+/* ==========================================================================
+   UI/UX POLISHING & SCROLLBAR DESIGN
+   ========================================================================== */
+
+/* Custom Glassmorphic Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: var(--transition-smooth);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cyan-primary);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+:root[data-theme='light'] ::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.08);
+}
+
+:root[data-theme='light'] ::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cyan-primary);
+}
+
+/* Page Entrance Animation for tab panels */
+@keyframes tab-fade-slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply entrance animations to active tabs and dashboard grids */
+.metrics-grid,
+.charts-grid-secondary,
+.dashboard-layout,
+.comparison-grid,
+.chat-companion-layout {
+  animation: tab-fade-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Smooth transitions for inputs, select menus, and textareas */
+input,
+select,
+textarea {
+  transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+/* Subtle micro-interaction on button active states */
+.btn:active,
+.theme-toggle-btn:active {
+  transform: scale(0.96) translateY(0);
 }
 
